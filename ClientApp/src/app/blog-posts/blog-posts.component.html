@@ -1,0 +1,30 @@
+<h1>Blog posts</h1>
+
+<p *ngIf="!(blogPosts$ | async)"><em>Loading...</em></p>
+<p>
+  <a [routerLink]="['/add']" class="btn btn-primary float-right mb-3">New post</a>
+</p>
+
+<table class="table table-sm table-hover" *ngIf="(blogPosts$ | async)?.length>0">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Title</th>
+      <th>Creator</th>
+      <th>Date</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let blogPost of (blogPosts$ | async)">
+      <td>{{ blogPost.postId }}</td>
+      <td><a [routerLink]="['/blogpost/', blogPost.postId]">{{ blogPost.title }}</a></td>
+      <td>{{ blogPost.creator }}</td>
+      <td>{{ blogPost.dt | date: "dd.MM.y" }}</td>
+      <td><a [routerLink]="['/blogpost/edit/', blogPost.postId]" class="btn btn-primary btn-sm float-right">Edit</a>
+      </td>
+      <td><a [routerLink]="" (click)="delete(blogPost.postId)" class="btn btn-danger btn-sm float-right">Delete</a></td>
+    </tr>
+  </tbody>
+</table>
