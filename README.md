@@ -24,10 +24,10 @@ For the Angular front-end we'll also use:
 If you clone the repo, make sure you setup the database and Entity Framework migrations!
 This is how:
 
-In Visual Studio:
+In Visual Studio 2019:
 
 1. Remove the contents of the folder Migrations.
-2. Then open the Package Manager Console (Tools->Nuget Package Manager->Package Manager Console.
+2. Then open the Package Manager Console (Tools->Nuget Package Manager->Package Manager Console).
 3. Run the following commands:
 
 ```
