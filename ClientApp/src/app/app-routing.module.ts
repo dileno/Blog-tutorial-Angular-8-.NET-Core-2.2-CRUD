@@ -6,9 +6,9 @@ import { BlogPostAddEditComponent } from './blog-post-add-edit/blog-post-add-edi
 
 const routes: Routes = [
   { path: '', component: BlogPostsComponent, pathMatch: 'full' },
-  { path: 'blogpost/:id', component: BlogPostComponent },
+  { path: 'blogpost/:slug', component: BlogPostComponent },
   { path: 'add', component: BlogPostAddEditComponent },
-  { path: 'blogpost/edit/:id', component: BlogPostAddEditComponent },
+  { path: 'blogpost/edit/:slug', component: BlogPostAddEditComponent },
   { path: '**', redirectTo: '/' }
 ];
 

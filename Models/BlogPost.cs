@@ -13,7 +13,9 @@ namespace Blog.Models
 		public string Title { get; set; }
 		[Required]
 		public string Body { get; set; }
-		[Required]
+        [Required]
+        public string Slug { get; set; }
+        [Required]
 		public DateTime Dt { get; set; }
 	}
 }

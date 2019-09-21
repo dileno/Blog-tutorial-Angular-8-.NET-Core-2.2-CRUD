@@ -3,5 +3,6 @@ export class BlogPost {
   creator: string;
   title: string;
   body: string;
+  slug: string;
   dt: Date;
 }

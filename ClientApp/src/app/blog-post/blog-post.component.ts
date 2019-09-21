@@ -11,12 +11,12 @@ import { BlogPost } from '../models/blogpost';
 })
 export class BlogPostComponent implements OnInit {
   blogPost$: Observable<BlogPost>;
-  postId: number;
+  slug: string;
 
   constructor(private blogPostService: BlogPostService, private avRoute: ActivatedRoute) {
-    const idParam = 'id';
-    if (this.avRoute.snapshot.params[idParam]) {
-      this.postId = this.avRoute.snapshot.params[idParam];
+    const slugParam = 'slug';
+    if (this.avRoute.snapshot.params[slugParam]) {
+      this.slug = this.avRoute.snapshot.params[slugParam];
     }
   }
 
@@ -25,6 +25,6 @@ export class BlogPostComponent implements OnInit {
   }
 
   loadBlogPost() {
-    this.blogPost$ = this.blogPostService.getBlogPost(this.postId);
+    this.blogPost$ = this.blogPostService.getBlogPost(this.slug);
   }
 }

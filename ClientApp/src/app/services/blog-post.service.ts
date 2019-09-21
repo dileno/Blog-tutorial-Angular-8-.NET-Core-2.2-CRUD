@@ -30,8 +30,8 @@ export class BlogPostService {
       );
   }
 
-  getBlogPost(postId: number): Observable<BlogPost> {
-    return this.http.get<BlogPost>(this.myAppUrl + this.myApiUrl + postId)
+  getBlogPost(slug: string): Observable<BlogPost> {
+    return this.http.get<BlogPost>(this.myAppUrl + this.myApiUrl + slug)
       .pipe(
         retry(1),
         catchError(this.errorHandler)

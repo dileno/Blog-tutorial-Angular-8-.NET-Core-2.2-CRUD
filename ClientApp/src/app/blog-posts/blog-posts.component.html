@@ -19,12 +19,12 @@
   <tbody>
     <tr *ngFor="let blogPost of (blogPosts$ | async)">
       <td>{{ blogPost.postId }}</td>
-      <td><a [routerLink]="['/blogpost/', blogPost.postId]">{{ blogPost.title }}</a></td>
+      <td><a [routerLink]="['/blogpost/', blogPost.slug]">{{ blogPost.title }}</a></td>
       <td>{{ blogPost.creator }}</td>
       <td>{{ blogPost.dt | date: "dd.MM.y" }}</td>
-      <td><a [routerLink]="['/blogpost/edit/', blogPost.postId]" class="btn btn-primary btn-sm float-right">Edit</a>
+      <td><a [routerLink]="['/blogpost/edit/', blogPost.slug]" class="btn btn-primary btn-sm float-right">Edit</a>
       </td>
-      <td><a [routerLink]="" (click)="delete(blogPost.postId)" class="btn btn-danger btn-sm float-right">Delete</a></td>
+      <td><a [routerLink]="[]" (click)="delete(blogPost.postId)" class="btn btn-danger btn-sm float-right">Delete</a></td>
     </tr>
   </tbody>
 </table>

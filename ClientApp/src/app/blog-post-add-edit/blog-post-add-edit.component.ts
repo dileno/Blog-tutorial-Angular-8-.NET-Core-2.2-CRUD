@@ -3,6 +3,9 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { BlogPostService } from '../services/blog-post.service';
 import { BlogPost } from '../models/blogpost';
+import slugify from 'slugify';
+import uniqueSlug from 'unique-slug';
+import { delimiter } from 'path';
 
 @Component({
   selector: 'app-blog-post-add-edit',
@@ -15,16 +18,20 @@ export class BlogPostAddEditComponent implements OnInit {
   formTitle: string;
   formBody: string;
   postId: number;
+  slug: string;
   errorMessage: any;
   existingBlogPost: BlogPost;
+  delimiter: string;
 
   constructor(private blogPostService: BlogPostService, private formBuilder: FormBuilder, private avRoute: ActivatedRoute, private router: Router) {
-    const idParam = 'id';
+    const slugParam = 'slug';
     this.actionType = 'Add';
     this.formTitle = 'title';
     this.formBody = 'body';
-    if (this.avRoute.snapshot.params[idParam]) {
-      this.postId = this.avRoute.snapshot.params[idParam];
+    this.delimiter = '-';
+
+    if (this.avRoute.snapshot.params[slugParam]) {
+      this.slug = this.avRoute.snapshot.params[slugParam];
     }
 
     this.form = this.formBuilder.group(
@@ -33,14 +40,13 @@ export class BlogPostAddEditComponent implements OnInit {
         title: ['', [Validators.required]],
         body: ['', [Validators.required]],
       }
-    )
+    );
   }
 
   ngOnInit() {
-
-    if (this.postId > 0) {
+    if (this.slug !== '' && typeof this.slug !== 'undefined') {
       this.actionType = 'Edit';
-      this.blogPostService.getBlogPost(this.postId)
+      this.blogPostService.getBlogPost(this.slug)
         .subscribe(data => (
           this.existingBlogPost = data,
           this.form.controls[this.formTitle].setValue(data.title),
@@ -55,30 +61,39 @@ export class BlogPostAddEditComponent implements OnInit {
     }
 
     if (this.actionType === 'Add') {
-      let blogPost: BlogPost = {
+      const postTitle = this.form.get(this.formTitle).value;
+
+      const blogPost: BlogPost = {
         dt: new Date(),
         creator: 'Martin',
-        title: this.form.get(this.formTitle).value,
-        body: this.form.get(this.formBody).value
+        title: postTitle,
+        body: this.form.get(this.formBody).value,
+        slug: slugify(postTitle, { lower: true, replacement: this.delimiter }) + this.delimiter + uniqueSlug()
       };
 
       this.blogPostService.saveBlogPost(blogPost)
         .subscribe((data) => {
-          this.router.navigate(['/blogpost', data.postId]);
+          this.router.navigate(['/blogpost', data.slug]);
         });
     }
 
     if (this.actionType === 'Edit') {
-      let blogPost: BlogPost = {
+      const postTitle = this.form.get(this.formTitle).value;
+      const existingUniqueSlug = this.existingBlogPost.slug.substr(this.existingBlogPost.slug.lastIndexOf(this.delimiter) + 1);
+      const postSlug = slugify(postTitle, { lower: true, replacement: this.delimiter }) + this.delimiter + existingUniqueSlug;
+
+      const blogPost: BlogPost = {
         postId: this.existingBlogPost.postId,
         dt: this.existingBlogPost.dt,
         creator: this.existingBlogPost.creator,
-        title: this.form.get(this.formTitle).value,
-        body: this.form.get(this.formBody).value
+        title: postTitle,
+        body: this.form.get(this.formBody).value,
+        slug: postSlug
       };
+
       this.blogPostService.updateBlogPost(blogPost.postId, blogPost)
-        .subscribe((data) => {
-          this.router.navigate([this.router.url]);
+        .subscribe(() => {
+          this.router.navigate(['/blogpost/edit', blogPost.slug]);
         });
     }
   }

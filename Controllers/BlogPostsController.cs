@@ -31,16 +31,16 @@ namespace Blog.Controllers
             return _context.BlogPosts.OrderByDescending(p => p.PostId);
         }
 
-        // GET: api/BlogPosts/5
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetBlogPost([FromRoute] int id)
+        // GET: api/BlogPosts/Slug
+        [HttpGet("{slug}")]
+        public async Task<IActionResult> GetBlogPost([FromRoute] string slug)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var blogPost = await _context.BlogPosts.FindAsync(id);
+            var blogPost = await _context.BlogPosts.FirstOrDefaultAsync(p => p.Slug == slug);
 
             if (blogPost == null)
             {
@@ -98,7 +98,7 @@ namespace Blog.Controllers
             _repo.Add(blogPost);
             var save = await _repo.SaveAsync(blogPost);
 
-            return CreatedAtAction("GetBlogPost", new { id = blogPost.PostId }, blogPost);
+            return CreatedAtAction("GetBlogPost", new BlogPost { Slug = blogPost.Slug }, blogPost);
         }
 
         // DELETE: api/BlogPosts/5
@@ -122,12 +122,6 @@ namespace Blog.Controllers
             return Ok(blogPost);
         }
 
-        [HttpGet]
-        [Route("test")]
-        public IActionResult Test()
-        {
-            return Ok("Hello");
-        }
         private bool BlogPostExists(int id)
         {
             return _context.BlogPosts.Any(e => e.PostId == id);
