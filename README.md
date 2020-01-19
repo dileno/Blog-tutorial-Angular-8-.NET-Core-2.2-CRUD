@@ -40,3 +40,7 @@ Update-Database
 ## Debugging
 If you get an error message running the app, first make sure you installed node modules using the npm install command.
 In VS Code or in the Node.js command prompt, run `npm install` in the ClientApp folder.
+
+Make sure you've installed the following as well:
+1. Angular CLI using the `npm install -g @angular/cli command`.
+2. @angular-devkit/build-angular module using the `npm install --save-dev @angular-devkit/build-angular command`
